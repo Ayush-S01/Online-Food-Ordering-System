@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.shape.Circle?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.foodordering.controller.MenuController"
+            styleClass="root-pane">
+
+    <!-- Top nav bar -->
+    <top>
+        <VBox spacing="0">
+            <!-- Main Navbar -->
+            <HBox styleClass="navbar" alignment="CENTER_LEFT" spacing="14">
+                <padding><Insets top="12" right="24" bottom="12" left="24"/></padding>
+                <Label text="🍽 Food Menu" styleClass="nav-brand"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <TextField fx:id="searchField" promptText="🔍 Search dishes, cuisines..." prefWidth="230"
+                           styleClass="search-field"/>
+                <ComboBox fx:id="categoryFilter" prefWidth="150" promptText="All Categories"/>
+                <ComboBox fx:id="sortCombo" prefWidth="175"/>
+                <Button fx:id="viewCartButton" text="🛒 Cart" onAction="#handleViewCart" styleClass="nav-btn"/>
+                <Label fx:id="cartBadgeLabel" styleClass="cart-count-label"/>
+                <Button fx:id="homeButton" text="🏠 Home" onAction="#handleHome" styleClass="nav-btn"/>
+            </HBox>
+
+            <!-- Secondary Cuisine & Dietary Filter Bar -->
+            <HBox alignment="CENTER_LEFT" spacing="16" styleClass="filter-toolbar">
+                <padding><Insets top="8" right="24" bottom="8" left="24"/></padding>
+                <Label text="Cuisines:" styleClass="filter-label"/>
+                <ScrollPane fitToHeight="true" vbarPolicy="NEVER" hbarPolicy="AS_NEEDED" styleClass="chips-scroll" HBox.hgrow="ALWAYS">
+                    <HBox fx:id="cuisineChipsBar" spacing="8" alignment="CENTER_LEFT"/>
+                </ScrollPane>
+                <Separator orientation="VERTICAL"/>
+                <CheckBox fx:id="vegOnlyCheckBox" text="Pure Veg" styleClass="veg-nav-pill">
+                    <graphic>
+                        <StackPane styleClass="veg-badge-square">
+                            <Circle radius="4" fill="#27AE60"/>
+                        </StackPane>
+                    </graphic>
+                </CheckBox>
+                <Label fx:id="resultsCountLabel" text="Loading dishes..." styleClass="count-label"/>
+            </HBox>
+        </VBox>
+    </top>
+
+    <!-- Status bar -->
+    <bottom>
+        <HBox styleClass="status-bar" alignment="CENTER_LEFT">
+            <padding><Insets top="8" right="16" bottom="8" left="16"/></padding>
+            <Label fx:id="statusLabel" text="Explore fresh cuisines prepared by top chefs" styleClass="status-label"/>
+        </HBox>
+    </bottom>
+
+    <!-- Food grid -->
+    <center>
+        <ScrollPane fitToWidth="true" styleClass="scroll-pane">
+            <FlowPane fx:id="foodGrid" hgap="16" vgap="16" styleClass="food-grid">
+                <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+            </FlowPane>
+        </ScrollPane>
+    </center>
+</BorderPane>

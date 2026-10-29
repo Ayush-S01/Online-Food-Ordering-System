@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.foodordering.controller.CartController"
+            styleClass="root-pane">
+
+    <top>
+        <HBox styleClass="navbar" alignment="CENTER_LEFT" spacing="14">
+            <padding><Insets top="12" right="24" bottom="12" left="24"/></padding>
+            <Label text="🛒 Shopping Cart" styleClass="nav-brand"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button fx:id="menuButton" text="← Back to Menu" onAction="#handleMenu" styleClass="nav-btn"/>
+            <Button fx:id="homeButton" text="🏠 Home" onAction="#handleHome" styleClass="nav-btn"/>
+        </HBox>
+    </top>
+
+    <center>
+        <VBox spacing="0">
+            <padding><Insets top="20" right="40" bottom="20" left="40"/></padding>
+
+            <!-- Empty cart message -->
+            <Label fx:id="emptyCartLabel" text="🛒 Your cart is empty. Go browse the menu!"
+                   styleClass="empty-state-label" visible="false"/>
+
+            <!-- Cart items -->
+            <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" prefHeight="400"
+                        styleClass="scroll-pane">
+                <VBox fx:id="cartItemsContainer" spacing="10"/>
+            </ScrollPane>
+        </VBox>
+    </center>
+
+    <bottom>
+        <VBox styleClass="cart-summary" spacing="16">
+            <padding><Insets top="20" right="40" bottom="20" left="40"/></padding>
+            <Separator/>
+            <HBox alignment="CENTER_RIGHT" spacing="20">
+                <Label fx:id="subtotalLabel" text="Subtotal: ₹ 0.00" styleClass="subtotal-label"/>
+                <Button fx:id="checkoutButton" text="Proceed to Checkout →"
+                        onAction="#handleCheckout" styleClass="checkout-btn"/>
+            </HBox>
+        </VBox>
+    </bottom>
+</BorderPane>

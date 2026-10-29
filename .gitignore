@@ -1,0 +1,29 @@
+# .gitignore for Online Food Ordering System
+
+# Maven
+target/
+*.jar
+*.war
+dependency-reduced-pom.xml
+
+# Compiled classes
+*.class
+
+# Database credentials — NEVER commit
+src/main/resources/db.properties
+db.properties
+
+# IDE files
+.idea/
+*.iml
+.vscode/
+*.classpath
+*.project
+.settings/
+
+# OS files
+Thumbs.db
+.DS_Store
+
+# Logs
+*.log

@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.foodordering.controller.admin.AdminDashboardController"
+            styleClass="root-pane"
+            prefWidth="1100" prefHeight="720">
+
+    <!-- TOP NAVIGATION BAR -->
+    <top>
+        <HBox styleClass="admin-navbar" alignment="CENTER_LEFT" spacing="16">
+            <!-- Brand / Logo -->
+            <Label text="🍽 FoodHub" styleClass="admin-brand"/>
+            <Label text="Restaurant Management Console" style="-fx-text-fill: #94A3B8; -fx-font-size: 13.5px; -fx-font-weight: 600;"/>
+
+            <!-- Status Pill -->
+            <Label text="🟢 Kitchen Online" styleClass="admin-badge-online"/>
+
+            <Region HBox.hgrow="ALWAYS"/>
+
+            <!-- Current User Badge -->
+            <Label fx:id="welcomeLabel" text="Welcome, Admin" styleClass="admin-user-pill"/>
+
+            <!-- Storefront Quick Link -->
+            <Button text="🌐 Storefront View" onAction="#handleGoToStorefront" styleClass="admin-nav-storefront-btn"/>
+
+            <!-- Refresh Button -->
+            <Button text="🔄 Refresh" onAction="#handleRefresh" styleClass="admin-nav-storefront-btn"/>
+
+            <!-- Logout Button -->
+            <Button fx:id="logoutBtn" text="🚪 Sign Out" onAction="#handleLogout" styleClass="admin-nav-logout-btn"/>
+        </HBox>
+    </top>
+
+    <!-- MAIN DASHBOARD CONTENT -->
+    <center>
+        <ScrollPane fitToWidth="true" style="-fx-background-color: #F8FAFC;">
+            <VBox spacing="28">
+                <padding><Insets top="28" right="36" bottom="36" left="36"/></padding>
+
+                <!-- HERO SECTION -->
+                <HBox alignment="CENTER_LEFT" spacing="16">
+                    <VBox spacing="4" HBox.hgrow="ALWAYS">
+                        <Label text="Executive Overview &amp; Operations 📊" style="-fx-font-size: 24px; -fx-font-weight: 800; -fx-text-fill: #0F172A;"/>
+                        <Label text="Real-time analytics, inventory management, live customer orders, and promotional vouchers." style="-fx-font-size: 13.5px; -fx-text-fill: #64748B;"/>
+                    </VBox>
+                </HBox>
+
+                <!-- STATS CARDS ROW (5 METRICS) -->
+                <HBox spacing="16" alignment="CENTER">
+                    <!-- 1. Total Revenue -->
+                    <VBox styleClass="admin-stat-card" HBox.hgrow="ALWAYS" spacing="10">
+                        <HBox alignment="CENTER_LEFT">
+                            <Label text="TOTAL REVENUE" styleClass="admin-stat-title"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Label text="💰" style="-fx-font-size: 20px;"/>
+                        </HBox>
+                        <Label fx:id="revenueLabel" text="₹ 0.00" styleClass="admin-stat-value" style="-fx-text-fill: #FF5E36;"/>
+                        <Label text="Cumulative earnings to date" styleClass="admin-stat-sub"/>
+                    </VBox>
+
+                    <!-- 2. Total Orders -->
+                    <VBox styleClass="admin-stat-card" HBox.hgrow="ALWAYS" spacing="10">
+                        <HBox alignment="CENTER_LEFT">
+                            <Label text="TOTAL ORDERS" styleClass="admin-stat-title"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Label text="🛍️" style="-fx-font-size: 20px;"/>
+                        </HBox>
+                        <Label fx:id="totalOrdersLabel" text="0" styleClass="admin-stat-value"/>
+                        <Label text="All lifetime orders received" styleClass="admin-stat-sub"/>
+                    </VBox>
+
+                    <!-- 3. Today's Orders -->
+                    <VBox styleClass="admin-stat-card" HBox.hgrow="ALWAYS" spacing="10">
+                        <HBox alignment="CENTER_LEFT">
+                            <Label text="TODAY'S ORDERS" styleClass="admin-stat-title"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Label text="⚡" style="-fx-font-size: 20px;"/>
+                        </HBox>
+                        <Label fx:id="todayOrdersLabel" text="0" styleClass="admin-stat-value" style="-fx-text-fill: #2563EB;"/>
+                        <Label text="Incoming orders today" styleClass="admin-stat-sub"/>
+                    </VBox>
+
+                    <!-- 4. Menu Food Items -->
+                    <VBox styleClass="admin-stat-card" HBox.hgrow="ALWAYS" spacing="10">
+                        <HBox alignment="CENTER_LEFT">
+                            <Label text="MENU DISHES" styleClass="admin-stat-title"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Label text="🍲" style="-fx-font-size: 20px;"/>
+                        </HBox>
+                        <Label fx:id="foodCountLabel" text="0" styleClass="admin-stat-value"/>
+                        <Label text="Dishes in food catalog" styleClass="admin-stat-sub"/>
+                    </VBox>
+
+                    <!-- 5. Active Coupons -->
+                    <VBox styleClass="admin-stat-card" HBox.hgrow="ALWAYS" spacing="10">
+                        <HBox alignment="CENTER_LEFT">
+                            <Label text="ACTIVE COUPONS" styleClass="admin-stat-title"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Label text="🎟️" style="-fx-font-size: 20px;"/>
+                        </HBox>
+                        <Label fx:id="couponsCountLabel" text="0" styleClass="admin-stat-value" style="-fx-text-fill: #10B981;"/>
+                        <Label text="Live promotional discounts" styleClass="admin-stat-sub"/>
+                    </VBox>
+                </HBox>
+
+                <!-- SECTION HEADER -->
+                <VBox spacing="2">
+                    <Label text="Restaurant Operation Modules" style="-fx-font-size: 18px; -fx-font-weight: 800; -fx-text-fill: #1E293B;"/>
+                    <Label text="Direct controls to administer your restaurant menu, orders, and marketing" style="-fx-font-size: 13px; -fx-text-fill: #64748B;"/>
+                </VBox>
+
+                <!-- OPERATION HUB CARDS (3 INTERACTIVE TILES) -->
+                <HBox spacing="22" alignment="CENTER">
+                    <!-- Module 1: Food Management -->
+                    <VBox styleClass="admin-op-card" HBox.hgrow="ALWAYS" spacing="14" prefHeight="240">
+                        <Label text="🍲" styleClass="admin-op-icon-badge"/>
+                        <Label text="Food &amp; Menu Catalog" styleClass="admin-op-title"/>
+                        <Label text="Add culinary items, update prices, manage categories and cuisines, mark dishes pure-veg, and toggle stock availability in real time."
+                               wrapText="true" styleClass="admin-op-desc" VBox.vgrow="ALWAYS"/>
+                        <Button fx:id="manageFoodBtn" text="Manage Food Items →" onAction="#handleManageFood"
+                                styleClass="admin-op-btn" maxWidth="Infinity"/>
+                    </VBox>
+
+                    <!-- Module 2: Order Management -->
+                    <VBox styleClass="admin-op-card" HBox.hgrow="ALWAYS" spacing="14" prefHeight="240">
+                        <Label text="📋" styleClass="admin-op-icon-badge"/>
+                        <Label text="Orders &amp; Live Tracking" styleClass="admin-op-title"/>
+                        <Label text="Inspect customer orders, view ordered dish breakdowns, track customer delivery addresses and phone numbers, and update kitchen progress states."
+                               wrapText="true" styleClass="admin-op-desc" VBox.vgrow="ALWAYS"/>
+                        <Button fx:id="manageOrdersBtn" text="Manage Orders →" onAction="#handleManageOrders"
+                                styleClass="admin-op-btn" style="-fx-background-color: #2563EB;" maxWidth="Infinity"/>
+                    </VBox>
+
+                    <!-- Module 3: Coupon Management -->
+                    <VBox styleClass="admin-op-card" HBox.hgrow="ALWAYS" spacing="14" prefHeight="240">
+                        <Label text="🎟️" styleClass="admin-op-icon-badge"/>
+                        <Label text="Coupons &amp; Promotions" styleClass="admin-op-title"/>
+                        <Label text="Create discount promo codes (percentage or flat amount), configure minimum spend thresholds, manage expiration dates, and activate/pause campaigns."
+                               wrapText="true" styleClass="admin-op-desc" VBox.vgrow="ALWAYS"/>
+                        <Button fx:id="manageCouponsBtn" text="Manage Coupons →" onAction="#handleManageCoupons"
+                                styleClass="admin-op-btn" style="-fx-background-color: #0F172A;" maxWidth="Infinity"/>
+                    </VBox>
+                </HBox>
+
+                <!-- FOOTER STATUS BAR -->
+                <HBox alignment="CENTER_LEFT" spacing="14" style="-fx-background-color: white; -fx-padding: 12 18; -fx-background-radius: 10px; -fx-border-color: #E2E8F0; -fx-border-radius: 10px;">
+                    <Label text="🟢 MySQL Database: Connected" style="-fx-font-size: 11.5px; -fx-font-weight: 600; -fx-text-fill: #10B981;"/>
+                    <Separator orientation="VERTICAL"/>
+                    <Label text="🏢 Branch: FoodHub Main Kitchen (Individual Restaurant Mode)" style="-fx-font-size: 11.5px; -fx-text-fill: #64748B;"/>
+                    <Separator orientation="VERTICAL"/>
+                    <Label text="⚡ JavaFX 21 &amp; JDK 26 Runtime" style="-fx-font-size: 11.5px; -fx-text-fill: #94A3B8;"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Label text="System Version 1.0.0" style="-fx-font-size: 11.5px; -fx-text-fill: #94A3B8; -fx-font-weight: bold;"/>
+                </HBox>
+            </VBox>
+        </ScrollPane>
+    </center>
+</BorderPane>

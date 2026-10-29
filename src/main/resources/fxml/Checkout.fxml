@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.foodordering.controller.CheckoutController"
+            styleClass="root-pane">
+
+    <fx:define>
+        <ToggleGroup fx:id="paymentToggle"/>
+    </fx:define>
+
+    <!-- Navbar -->
+    <top>
+        <HBox styleClass="navbar" alignment="CENTER_LEFT" spacing="14">
+            <padding><Insets top="12" right="24" bottom="12" left="24"/></padding>
+            <Label text="✅ Checkout &amp; Secure Payment" styleClass="nav-brand"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button fx:id="backToCartBtn" text="← Back to Menu"
+                    onAction="#handleBackToCart" styleClass="nav-btn"/>
+        </HBox>
+    </top>
+
+    <!-- Main Content -->
+    <center>
+        <ScrollPane fitToWidth="true" styleClass="scroll-pane">
+            <HBox spacing="30" alignment="TOP_CENTER">
+                <padding><Insets top="25" right="35" bottom="35" left="35"/></padding>
+
+                <!-- Left Column: Delivery & Payment Details -->
+                <VBox spacing="20" prefWidth="480">
+
+                    <!-- Delivery Address Card -->
+                    <VBox styleClass="section-card" spacing="10">
+                        <HBox alignment="CENTER_LEFT" spacing="8">
+                            <Label text="📍" style="-fx-font-size: 18;"/>
+                            <Label text="Delivery Details" styleClass="section-title"/>
+                        </HBox>
+                        
+                        <Label text="Complete Delivery Address *" styleClass="field-label"/>
+                        <TextArea fx:id="deliveryAddressField" promptText="House/Flat No., Building, Street, Landmark"
+                                  prefHeight="65" styleClass="input-field" wrapText="true"/>
+
+                        <HBox spacing="10">
+                            <VBox spacing="4" HBox.hgrow="ALWAYS">
+                                <Label text="Phone Number *" styleClass="field-label"/>
+                                <TextField fx:id="phoneField" promptText="10-digit mobile number" styleClass="input-field"/>
+                            </VBox>
+                            <VBox spacing="4" HBox.hgrow="ALWAYS">
+                                <Label text="Delivery Instructions" styleClass="field-label"/>
+                                <TextField fx:id="instructionsField" promptText="e.g. Ring bell, leave at door" styleClass="input-field"/>
+                            </VBox>
+                        </HBox>
+                    </VBox>
+
+                    <!-- Coupon Card -->
+                    <VBox styleClass="section-card" spacing="10">
+                        <HBox alignment="CENTER_LEFT" spacing="8">
+                            <Label text="🏷️" style="-fx-font-size: 18;"/>
+                            <Label text="Apply Promo Coupon" styleClass="section-title"/>
+                        </HBox>
+                        
+                        <HBox spacing="10" alignment="CENTER_LEFT">
+                            <TextField fx:id="couponField" promptText="Enter promo code"
+                                       styleClass="input-field" HBox.hgrow="ALWAYS"/>
+                            <Button fx:id="applyCouponBtn" text="Apply"
+                                    onAction="#handleApplyCoupon" styleClass="apply-btn"/>
+                        </HBox>
+                        <Label fx:id="couponStatusLabel" text="" wrapText="true" styleClass="coupon-status"/>
+
+                        <!-- One-click coupon chips -->
+                        <Label text="Available Offers (Tap to apply):" style="-fx-font-size: 11px; -fx-text-fill: #888;"/>
+                        <FlowPane hgap="8" vgap="8">
+                            <Button text="WELCOME10 (10% OFF)" onAction="#handleQuickCouponWelcome" styleClass="coupon-chip"/>
+                            <Button text="SAVE50 (₹50 OFF)"   onAction="#handleQuickCouponSave50"   styleClass="coupon-chip"/>
+                            <Button text="FEAST20 (20% OFF)"  onAction="#handleQuickCouponFeast20"  styleClass="coupon-chip"/>
+                            <Button text="FLAT100 (₹100 OFF)" onAction="#handleQuickCouponFlat100" styleClass="coupon-chip"/>
+                        </FlowPane>
+                    </VBox>
+
+                    <!-- Payment Method Card -->
+                    <VBox styleClass="section-card" spacing="14">
+                        <HBox alignment="CENTER_LEFT" spacing="8">
+                            <Label text="💳" style="-fx-font-size: 18;"/>
+                            <Label text="Payment Options" styleClass="section-title"/>
+                        </HBox>
+
+                        <!-- UPI Option -->
+                        <VBox spacing="8" styleClass="payment-option-card">
+                            <RadioButton fx:id="upiRadio" text="Instant UPI (GPay, PhonePe, Paytm, BHIM)"
+                                         toggleGroup="$paymentToggle" selected="true" styleClass="payment-radio"/>
+                            <VBox fx:id="upiDetailsBox" spacing="8" style="-fx-padding: 6 0 4 24;">
+                                <Label text="Enter UPI ID / VPA:" styleClass="field-label"/>
+                                <HBox spacing="8" alignment="CENTER_LEFT">
+                                    <TextField fx:id="upiIdField" promptText="yourname@okaxis or 9876543210@paytm"
+                                               text="ayush@upi" styleClass="input-field" HBox.hgrow="ALWAYS"/>
+                                    <Label text="⚡ Instant" style="-fx-text-fill: #27AE60; -fx-font-size: 11px; -fx-font-weight: bold;"/>
+                                </HBox>
+                            </VBox>
+                        </VBox>
+
+                        <!-- Card Option -->
+                        <VBox spacing="8" styleClass="payment-option-card">
+                            <RadioButton fx:id="cardRadio" text="Credit / Debit Card (Visa, Mastercard, RuPay)"
+                                         toggleGroup="$paymentToggle" styleClass="payment-radio"/>
+                            <VBox fx:id="cardDetailsBox" spacing="8" style="-fx-padding: 6 0 4 24;">
+                                <Label text="Card Number:" styleClass="field-label"/>
+                                <TextField fx:id="cardNumberField" promptText="4532 8921 7382 9102" text="4532 8921 7382 9102" styleClass="input-field"/>
+                                <HBox spacing="8">
+                                    <VBox spacing="4" HBox.hgrow="ALWAYS">
+                                        <Label text="Expiry (MM/YY):" styleClass="field-label"/>
+                                        <TextField fx:id="cardExpiryField" promptText="12/28" text="08/29" styleClass="input-field"/>
+                                    </VBox>
+                                    <VBox spacing="4" HBox.hgrow="ALWAYS">
+                                        <Label text="CVV:" styleClass="field-label"/>
+                                        <TextField fx:id="cardCvvField" promptText="•••" text="342" styleClass="input-field"/>
+                                    </VBox>
+                                    <VBox spacing="4" HBox.hgrow="ALWAYS">
+                                        <Label text="Cardholder Name:" styleClass="field-label"/>
+                                        <TextField fx:id="cardHolderField" promptText="Name on card" text="Ayush" styleClass="input-field"/>
+                                    </VBox>
+                                </HBox>
+                            </VBox>
+                        </VBox>
+
+                        <!-- Net Banking Option -->
+                        <VBox spacing="8" styleClass="payment-option-card">
+                            <RadioButton fx:id="netBankingRadio" text="Net Banking"
+                                         toggleGroup="$paymentToggle" styleClass="payment-radio"/>
+                            <VBox fx:id="netBankingDetailsBox" spacing="8" style="-fx-padding: 6 0 4 24;">
+                                <Label text="Select Bank:" styleClass="field-label"/>
+                                <ComboBox fx:id="bankSelectCombo" maxWidth="Infinity"/>
+                            </VBox>
+                        </VBox>
+
+                        <!-- Cash on Delivery -->
+                        <VBox spacing="8" styleClass="payment-option-card">
+                            <RadioButton fx:id="codRadio" text="Cash on Delivery (Pay cash/UPI at doorstep)"
+                                         toggleGroup="$paymentToggle" styleClass="payment-radio"/>
+                            <VBox fx:id="codDetailsBox" spacing="4" style="-fx-padding: 4 0 0 24;">
+                                <Label text="💡 Please keep exact cash handy for hassle-free delivery."
+                                       style="-fx-font-size: 11px; -fx-text-fill: #666;"/>
+                            </VBox>
+                        </VBox>
+                    </VBox>
+                </VBox>
+
+                <!-- Right Column: Bill Summary -->
+                <VBox styleClass="section-card" spacing="16" prefWidth="380">
+                    <HBox alignment="CENTER_LEFT" spacing="8">
+                        <Label text="🧾" style="-fx-font-size: 18;"/>
+                        <Label text="Bill Summary" styleClass="section-title"/>
+                    </HBox>
+                    <Separator/>
+
+                    <HBox alignment="CENTER_LEFT">
+                        <Label text="Item Subtotal" styleClass="summary-key" HBox.hgrow="ALWAYS"/>
+                        <Label fx:id="subtotalLabel" text="₹ 0.00" styleClass="summary-val"/>
+                    </HBox>
+                    <HBox alignment="CENTER_LEFT">
+                        <Label text="Coupon Discount" styleClass="summary-key" HBox.hgrow="ALWAYS"/>
+                        <Label fx:id="discountLabel" text="- ₹ 0.00" styleClass="summary-discount"/>
+                    </HBox>
+                    <HBox alignment="CENTER_LEFT">
+                        <Label text="Delivery Partner Fee" styleClass="summary-key" HBox.hgrow="ALWAYS"/>
+                        <Label fx:id="deliveryFeeLabel" text="FREE" style="-fx-text-fill: #27AE60; -fx-font-weight: bold;"/>
+                    </HBox>
+                    <HBox alignment="CENTER_LEFT">
+                        <Label text="Restaurant GST &amp; Taxes (5%)" styleClass="summary-key" HBox.hgrow="ALWAYS"/>
+                        <Label fx:id="taxLabel" text="₹ 0.00" styleClass="summary-val"/>
+                    </HBox>
+                    <Separator/>
+
+                    <HBox alignment="CENTER_LEFT">
+                        <Label text="To Pay" styleClass="summary-total-key" HBox.hgrow="ALWAYS"/>
+                        <Label fx:id="finalAmountLabel" text="₹ 0.00" styleClass="summary-total-val"/>
+                    </HBox>
+
+                    <!-- Place Order / Payment Button -->
+                    <VBox spacing="10" alignment="CENTER" style="-fx-padding: 10 0 0 0;">
+                        <Button fx:id="placeOrderBtn" text="🔒 Pay &amp; Place Order"
+                                onAction="#handlePlaceOrder" styleClass="primary-btn-large" maxWidth="Infinity"/>
+                        <ProgressIndicator fx:id="payProgressIndicator" prefWidth="28" prefHeight="28" visible="false"/>
+                        <Label text="100% Secure Simulated Transaction" style="-fx-font-size: 11px; -fx-text-fill: #888;"/>
+                    </VBox>
+                </VBox>
+            </HBox>
+        </ScrollPane>
+    </center>
+</BorderPane>

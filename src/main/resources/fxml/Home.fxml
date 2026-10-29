@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.shape.Circle?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.foodordering.controller.HomeController"
+            styleClass="root-pane">
+
+    <!-- Top Navigation Bar (Zomato-inspired) -->
+    <top>
+        <VBox spacing="0">
+            <!-- Main Navbar -->
+            <HBox styleClass="navbar" alignment="CENTER_LEFT" spacing="14">
+                <padding><Insets top="10" right="20" bottom="10" left="20"/></padding>
+                
+                <!-- Brand -->
+                <VBox spacing="1">
+                    <Label text="🍲 FoodHub" styleClass="nav-brand"/>
+                    <Label text="Multi-Cuisine Food Ordering" style="-fx-text-fill: rgba(255,255,255,0.85); -fx-font-size: 10px;"/>
+                </VBox>
+
+                <Region prefWidth="12"/>
+
+                <!-- Search Bar (focusTraversable=false prevents accidental auto-activation) -->
+                <TextField fx:id="searchField" promptText="🔍 Search dishes, ingredients, cuisines..."
+                           prefWidth="320" focusTraversable="false" styleClass="search-field" HBox.hgrow="ALWAYS"/>
+
+                <!-- Pure Veg Filter Pill (Zomato-style) -->
+                <CheckBox fx:id="vegOnlyCheckBox" text="Pure Veg" styleClass="veg-nav-pill">
+                    <graphic>
+                        <StackPane styleClass="veg-badge-square">
+                            <Circle radius="4" fill="#27AE60"/>
+                        </StackPane>
+                    </graphic>
+                </CheckBox>
+
+                <Region HBox.hgrow="ALWAYS"/>
+
+                <!-- User Greeting -->
+                <Label fx:id="welcomeLabel" styleClass="nav-welcome"/>
+
+                <!-- My Orders Button -->
+                <Button fx:id="ordersButton" text="📋 My Orders" onAction="#handleOrders" styleClass="nav-btn"/>
+
+                <!-- Logout Button -->
+                <Button fx:id="logoutButton" text="Logout" onAction="#handleLogout" styleClass="nav-btn-danger"/>
+            </HBox>
+
+            <!-- Secondary Quick-Jump Anchor Bar: Cuisines -->
+            <HBox alignment="CENTER_LEFT" spacing="12" styleClass="filter-toolbar">
+                <padding><Insets top="8" right="20" bottom="8" left="20"/></padding>
+                <Label text="Cuisine:" styleClass="filter-label"/>
+                <ScrollPane fitToHeight="true" vbarPolicy="NEVER" hbarPolicy="AS_NEEDED" styleClass="chips-scroll" HBox.hgrow="ALWAYS">
+                    <HBox fx:id="cuisineChipsBar" spacing="8" alignment="CENTER_LEFT"/>
+                </ScrollPane>
+                <Label fx:id="resultsCountLabel" text="Loading menu..." styleClass="count-label"/>
+            </HBox>
+        </VBox>
+    </top>
+
+    <!-- Main Content: Split layout with shifted-left menu and right sidebar -->
+    <center>
+        <HBox spacing="0" alignment="TOP_LEFT" styleClass="home-content-split">
+            <!-- Left Column: Main Food Menu centered with equal spaces left and right -->
+            <ScrollPane fx:id="mainScrollPane" fitToWidth="true" HBox.hgrow="ALWAYS" styleClass="menu-scroll-pane">
+                <VBox spacing="18" alignment="TOP_CENTER" styleClass="menu-container">
+                    <padding><Insets top="16" right="20" bottom="40" left="20"/></padding>
+
+                    <!-- Hero Promotional Banner -->
+                    <VBox alignment="CENTER_LEFT" spacing="10" styleClass="home-hero-card" maxWidth="880">
+                        <padding><Insets top="14" right="20" bottom="14" left="20"/></padding>
+                        <HBox alignment="CENTER_LEFT" spacing="16">
+                            <VBox spacing="4" HBox.hgrow="ALWAYS">
+                                <Label text="Craving Something Delicious? 🍕🍛" styleClass="hero-title"/>
+                                <Label text="Explore authentic multi-cuisine specialties with chef-curated flavors delivered hot &amp; fresh."
+                                       styleClass="hero-subtitle"/>
+                            </VBox>
+                            <!-- Quick Promo Code Pills -->
+                            <VBox spacing="4" alignment="CENTER_RIGHT">
+                                <Label text="Active Offers (Apply at checkout):" style="-fx-font-size: 11px; -fx-text-fill: #888; -fx-font-weight: bold;"/>
+                                <HBox spacing="6">
+                                    <Label text="SAVE50 (₹50 OFF)" style="-fx-background-color: #FFF0EB; -fx-text-fill: #FF5E36; -fx-font-size: 11px; -fx-font-weight: bold; -fx-padding: 4 8 4 8; -fx-background-radius: 6; -fx-border-color: #FF5E36; -fx-border-radius: 6;"/>
+                                    <Label text="FEAST20 (20% OFF)" style="-fx-background-color: #FFF0EB; -fx-text-fill: #FF5E36; -fx-font-size: 11px; -fx-font-weight: bold; -fx-padding: 4 8 4 8; -fx-background-radius: 6; -fx-border-color: #FF5E36; -fx-border-radius: 6;"/>
+                                </HBox>
+                            </VBox>
+                        </HBox>
+                    </VBox>
+
+                    <!-- Cuisine-by-Cuisine Direct Menu Container (Centered) -->
+                    <VBox fx:id="cuisineSectionsContainer" spacing="24" alignment="TOP_CENTER" maxWidth="880"/>
+                </VBox>
+            </ScrollPane>
+
+            <!-- Right Column: Wider Sidebar Space (Width 440px) -->
+            <VBox fx:id="rightSidePanel" prefWidth="440" minWidth="420" maxWidth="460" styleClass="right-side-panel">
+                <!-- Mode 1: Today's Special View (Shown when cart is empty or toggled) -->
+                <ScrollPane fx:id="specialsScrollPane" fitToWidth="true" VBox.vgrow="ALWAYS" styleClass="sidebar-scroll">
+                    <VBox spacing="14">
+                        <padding><Insets top="16" right="14" bottom="16" left="14"/></padding>
+
+                        <HBox alignment="CENTER_LEFT" spacing="8">
+                            <Label text="🔥 Today's Special" styleClass="sidebar-section-title"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Label text="Chef's Pick" styleClass="sidebar-badge-orange"/>
+                        </HBox>
+                        <Label text="Handcrafted delicacies made fresh today — tap + ADD to order" styleClass="sidebar-section-sub"/>
+                        
+                        <!-- List of Today's Specials with expanded width -->
+                        <VBox fx:id="todaysSpecialsContainer" id="todaysSpecialsContainer" spacing="12"/>
+                    </VBox>
+                </ScrollPane>
+
+                <!-- Mode 2: Cart Drawer View (Opens automatically on adding items) -->
+                <VBox fx:id="cartDrawerView" id="cartDrawerView" VBox.vgrow="ALWAYS" spacing="10" visible="false" managed="false">
+                    <padding><Insets top="14" right="14" bottom="10" left="14"/></padding>
+
+                    <!-- Cart Header -->
+                    <HBox alignment="CENTER_LEFT" spacing="8">
+                        <Label text="🛒 Your Cart" styleClass="sidebar-section-title"/>
+                        <Label fx:id="drawerItemCountBadge" text="0 items" styleClass="drawer-item-badge"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Button fx:id="closeDrawerBtn" text="🔥 View Specials" onAction="#handleCloseCartDrawer" styleClass="drawer-close-btn"/>
+                    </HBox>
+
+                    <!-- Scrollable Order Items & Distinct Recommendations -->
+                    <ScrollPane fx:id="drawerCartScrollPane" fitToWidth="true" VBox.vgrow="ALWAYS" styleClass="sidebar-scroll">
+                        <VBox spacing="14">
+                            <padding><Insets top="4" right="6" bottom="10" left="2"/></padding>
+
+                            <!-- Section 1: Your Ordered Items -->
+                            <VBox spacing="8">
+                                <Label text="📋 YOUR ORDER ITEMS" styleClass="cart-section-header"/>
+                                <VBox fx:id="drawerCartItemsContainer" id="drawerCartItemsContainer" spacing="8"/>
+                            </VBox>
+
+                            <!-- Section 2: Distinct Recommendations Section (Inside Cart, Below Order Items) -->
+                            <VBox fx:id="drawerRecsBox" styleClass="cart-recs-panel" spacing="8">
+                                <VBox spacing="2">
+                                    <HBox alignment="CENTER_LEFT" spacing="6">
+                                        <Label text="✨ Pairs Well With Your Order" styleClass="cart-recs-title"/>
+                                        <Region HBox.hgrow="ALWAYS"/>
+                                        <Label text="Recommended Add-on" styleClass="cart-recs-badge"/>
+                                    </HBox>
+                                    <Label text="Curated dishes to complement your current meal" styleClass="cart-recs-sub"/>
+                                </VBox>
+                                <VBox fx:id="drawerRecommendationsContainer" id="drawerRecommendationsContainer" spacing="8"/>
+                            </VBox>
+                        </VBox>
+                    </ScrollPane>
+
+                    <!-- Bill Summary Card -->
+                    <VBox fx:id="drawerBillBox" styleClass="drawer-bill-card" spacing="7">
+                        <HBox alignment="CENTER_LEFT">
+                            <Label text="Item Subtotal" styleClass="bill-label"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Label fx:id="drawerSubtotalLabel" text="₹ 0.00" styleClass="bill-value"/>
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT">
+                            <Label text="Delivery Partner Fee" styleClass="bill-label"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Label text="FREE" styleClass="bill-value-free"/>
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT">
+                            <Label text="GST &amp; Restaurant Taxes (5%)" styleClass="bill-label"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Label fx:id="drawerTaxLabel" text="₹ 0.00" styleClass="bill-value"/>
+                        </HBox>
+                        <Separator/>
+                        <HBox alignment="CENTER_LEFT">
+                            <Label text="To Pay" styleClass="bill-total-label"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Label fx:id="drawerTotalLabel" id="drawerTotalLabel" text="₹ 0.00" styleClass="bill-total-value"/>
+                        </HBox>
+                        <Button fx:id="drawerCheckoutBtn" text="Proceed to Checkout ➔" onAction="#handleDrawerCheckout" styleClass="drawer-checkout-btn" maxWidth="Infinity"/>
+                    </VBox>
+                </VBox>
+
+                <!-- Bottom Pinned: Bottom-Right Cart Pop-up Card -->
+                <VBox styleClass="bottom-popup-wrapper">
+                    <padding><Insets top="8" right="14" bottom="12" left="14"/></padding>
+                    <HBox fx:id="bottomCartPopup" id="bottomCartPopup" alignment="CENTER_LEFT" spacing="12" styleClass="bottom-cart-popup" onMouseClicked="#handleToggleCartDrawer">
+                        <StackPane styleClass="popup-cart-icon-circle">
+                            <Label text="🛒" style="-fx-font-size: 16px;"/>
+                        </StackPane>
+                        <VBox spacing="1" HBox.hgrow="ALWAYS">
+                            <Label fx:id="popupCartItemsLabel" id="popupCartItemsLabel" text="0 items in cart" styleClass="popup-cart-items"/>
+                            <Label fx:id="popupCartTotalLabel" id="popupCartTotalLabel" text="₹ 0.00" styleClass="popup-cart-total"/>
+                        </VBox>
+                        <Button fx:id="popupCartToggleBtn" text="View Cart ▲" onAction="#handleToggleCartDrawer" styleClass="popup-cart-btn"/>
+                    </HBox>
+                </VBox>
+            </VBox>
+        </HBox>
+    </center>
+</BorderPane>

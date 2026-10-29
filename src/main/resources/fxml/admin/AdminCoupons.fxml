@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.control.cell.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.foodordering.controller.admin.AdminCouponController"
+            styleClass="root-pane">
+
+    <top>
+        <HBox styleClass="admin-navbar" alignment="CENTER_LEFT" spacing="14">
+            <Label text="🍽 FoodHub" styleClass="admin-brand"/>
+            <Label text="Promotions &amp; Coupon Vouchers" style="-fx-text-fill: #94A3B8; -fx-font-size: 14px; -fx-font-weight: 600;"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button fx:id="backBtn" text="← Back to Dashboard" onAction="#handleBack" styleClass="admin-nav-storefront-btn"/>
+        </HBox>
+    </top>
+
+    <center>
+        <HBox spacing="20">
+            <padding><Insets top="20" right="24" bottom="20" left="24"/></padding>
+
+            <!-- Table -->
+            <VBox spacing="10" HBox.hgrow="ALWAYS">
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <Label text="Active &amp; Expired Coupons" styleClass="section-title"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Label text="💡 Click any coupon row to view or modify details" style="-fx-text-fill: #64748B; -fx-font-size: 12px;"/>
+                </HBox>
+                <TableView fx:id="couponsTable" VBox.vgrow="ALWAYS" prefHeight="540">
+                    <columns>
+                        <TableColumn fx:id="colId"       text="ID"         prefWidth="50"/>
+                        <TableColumn fx:id="colCode"     text="Promo Code" prefWidth="130"/>
+                        <TableColumn fx:id="colType"     text="Discount Type" prefWidth="110"/>
+                        <TableColumn fx:id="colValue"    text="Value"      prefWidth="85"/>
+                        <TableColumn fx:id="colMinOrder" text="Min Order (₹)" prefWidth="105"/>
+                        <TableColumn fx:id="colExpiry"   text="Valid Until" prefWidth="110"/>
+                        <TableColumn fx:id="colEnabled"  text="Status"     prefWidth="80"/>
+                    </columns>
+                </TableView>
+            </VBox>
+
+            <!-- Form -->
+            <VBox spacing="11" prefWidth="320" styleClass="form-panel">
+                <Label text="Coupon Editor &amp; Creator" styleClass="section-title"/>
+                <Label text="Promo Coupon Code *" styleClass="field-label"/>
+                <TextField fx:id="codeField" promptText="e.g. WELCOME50" styleClass="input-field"/>
+                
+                <Label text="Discount Type *" styleClass="field-label"/>
+                <ComboBox fx:id="typeCombo" maxWidth="Infinity" styleClass="input-field"/>
+
+                <HBox spacing="8">
+                    <VBox spacing="4" HBox.hgrow="ALWAYS">
+                        <Label text="Discount Value *" styleClass="field-label"/>
+                        <TextField fx:id="valueField" promptText="e.g. 50 or 20" styleClass="input-field"/>
+                    </VBox>
+                    <VBox spacing="4" HBox.hgrow="ALWAYS">
+                        <Label text="Min Order (₹)" styleClass="field-label"/>
+                        <TextField fx:id="minOrderField" promptText="0.00" styleClass="input-field"/>
+                    </VBox>
+                </HBox>
+
+                <Label text="Expiry Date *" styleClass="field-label"/>
+                <DatePicker fx:id="expiryPicker" maxWidth="Infinity" styleClass="input-field"/>
+                
+                <CheckBox fx:id="enabledCheck" text="Coupon is Active &amp; Redeemable" selected="true" style="-fx-font-weight: 600; -fx-padding: 4 0;"/>
+
+                <HBox spacing="10" style="-fx-padding: 4 0 0 0;">
+                    <Button fx:id="addBtn"    text="➕ Add Coupon" onAction="#handleAdd"    styleClass="primary-btn" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+                    <Button fx:id="updateBtn" text="💾 Update"     onAction="#handleUpdate" styleClass="primary-btn" style="-fx-background-color: #2563EB;" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+                </HBox>
+                <Button fx:id="toggleBtn" text="🔄 Toggle Active / Inactive"
+                        onAction="#handleToggleEnabled" styleClass="secondary-btn" maxWidth="Infinity"/>
+                <Button text="🧹 Clear Selection / New Form" onAction="#handleClear" styleClass="secondary-btn" maxWidth="Infinity"/>
+            </VBox>
+        </HBox>
+    </center>
+</BorderPane>

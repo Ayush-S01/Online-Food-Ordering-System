@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.image.*?>
+
+<StackPane xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.foodordering.controller.LoginController"
+           styleClass="bistro-landing-root"
+           prefWidth="1100" prefHeight="700">
+
+    <!-- Layer 0: Background Image Cover -->
+    <ImageView fx:id="bgImageView" preserveRatio="false" mouseTransparent="true">
+        <image>
+            <Image url="@../images/bistro_banner.png"/>
+        </image>
+    </ImageView>
+
+    <!-- Layer 1: Main Landing Page Content -->
+    <BorderPane fx:id="landingContentPane">
+
+        <!-- Top Navigation Bar -->
+        <top>
+            <HBox alignment="CENTER_LEFT" spacing="16" styleClass="bistro-navbar">
+                <padding><Insets top="28" right="54" bottom="16" left="54"/></padding>
+
+                <!-- Left: FoodHub Logo & Brand Name -->
+                <HBox alignment="CENTER_LEFT" spacing="12" styleClass="foodhub-logo-container">
+                    <ImageView fitHeight="38" preserveRatio="true">
+                        <image>
+                            <Image url="@../images/foodhub_logo.png"/>
+                        </image>
+                    </ImageView>
+                </HBox>
+
+                <!-- Spacer -->
+                <Region HBox.hgrow="ALWAYS"/>
+
+                <!-- Right: "Sign In as Admin" Pill Button -->
+                <Button fx:id="adminNavButton" text="Sign In as Admin"
+                        onAction="#handleOpenAdminModal" styleClass="bistro-admin-nav-btn"/>
+            </HBox>
+        </top>
+
+        <!-- Center: Hero Content -->
+        <center>
+            <VBox alignment="CENTER" spacing="20" maxWidth="760">
+                <padding><Insets bottom="60" left="20" right="20"/></padding>
+
+                <!-- Headline -->
+                <VBox alignment="CENTER" spacing="0">
+                    <Label text="Best food for" styleClass="bistro-hero-title"/>
+                    <Label text="your taste" styleClass="bistro-hero-title"/>
+                </VBox>
+
+                <!-- Subheading -->
+                <Label text="Discover delectable cuisine and unforgettable moments&#10;in our welcoming, culinary haven."
+                       styleClass="bistro-hero-subtitle" textAlignment="CENTER" wrapText="true"/>
+
+                <Region prefHeight="10"/>
+
+                <!-- Action Buttons: Sign in & Sign up -->
+                <HBox alignment="CENTER" spacing="18">
+                    <!-- Crimson Red Pill: Sign In -->
+                    <Button fx:id="signInHeroButton" text="Sign In"
+                            onAction="#handleOpenSignInModal" styleClass="bistro-primary-pill-btn"/>
+
+                    <!-- White Outline Pill: Sign Up -->
+                    <Button fx:id="signUpHeroButton" text="Sign Up"
+                            onAction="#handleOpenSignUpModal" styleClass="bistro-secondary-pill-btn"/>
+                </HBox>
+            </VBox>
+        </center>
+    </BorderPane>
+
+    <!-- Layer 2: Animated Modal Overlay (for Sign In, Sign Up & Admin Login) -->
+    <StackPane fx:id="modalOverlay" visible="false" managed="false" styleClass="bistro-modal-backdrop">
+
+        <!-- ==================== 1. SIGN IN MODAL CARD ==================== -->
+        <VBox fx:id="signInCard" visible="false" managed="false" styleClass="bistro-modal-card" maxWidth="430" spacing="14">
+            <padding><Insets top="28" right="32" bottom="28" left="32"/></padding>
+
+            <!-- Modal Header -->
+            <HBox alignment="CENTER_LEFT">
+                <VBox spacing="2" HBox.hgrow="ALWAYS">
+                    <Label text="Welcome Back 👋" styleClass="bistro-modal-title"/>
+                    <Label text="Sign in to your FoodHub account" styleClass="bistro-modal-desc"/>
+                </VBox>
+                <Button text="✕" onAction="#handleCloseModal" styleClass="bistro-modal-close-btn"/>
+            </HBox>
+
+            <!-- Google Sign-In Button -->
+            <Button fx:id="googleLoginButton" text="  Continue with Google"
+                    styleClass="auth-google-btn" maxWidth="Infinity" onAction="#handleGoogleLogin">
+                <graphic>
+                    <ImageView fitWidth="18" fitHeight="18" preserveRatio="true">
+                        <image>
+                            <Image url="@../images/google_logo.png"/>
+                        </image>
+                    </ImageView>
+                </graphic>
+            </Button>
+
+            <!-- Divider -->
+            <HBox alignment="CENTER" spacing="10">
+                <Separator HBox.hgrow="ALWAYS" style="-fx-opacity: 0.45;"/>
+                <Label text="or sign in with email" styleClass="auth-divider-text"/>
+                <Separator HBox.hgrow="ALWAYS" style="-fx-opacity: 0.45;"/>
+            </HBox>
+
+            <!-- Email Field -->
+            <VBox spacing="4" maxWidth="Infinity">
+                <Label text="Email Address *" styleClass="field-label"/>
+                <TextField fx:id="emailField" promptText="e.g. ayush@example.com" styleClass="input-field-modern"/>
+            </VBox>
+
+            <!-- Password Field -->
+            <VBox spacing="4" maxWidth="Infinity">
+                <Label text="Password *" styleClass="field-label"/>
+                <PasswordField fx:id="passwordField" promptText="Enter your password" styleClass="input-field-modern"/>
+            </VBox>
+
+            <!-- Error Label -->
+            <Label fx:id="errorLabel" styleClass="error-label" text="" wrapText="true" visible="false"/>
+
+            <!-- Sign In Submit Button -->
+            <Button fx:id="loginButton" text="Sign In →"
+                    styleClass="bistro-modal-submit-btn" maxWidth="Infinity" onAction="#handleLogin"/>
+
+            <!-- Switch to Sign Up -->
+            <HBox alignment="CENTER" spacing="6">
+                <Label text="Don't have an account?" styleClass="auth-hint"/>
+                <Hyperlink text="Create an account" onAction="#handleOpenSignUpModal" styleClass="auth-link"/>
+            </HBox>
+        </VBox>
+
+        <!-- ==================== 2. SIGN UP MODAL CARD ==================== -->
+        <VBox fx:id="signUpCard" visible="false" managed="false" styleClass="bistro-modal-card" maxWidth="440" spacing="12">
+            <padding><Insets top="28" right="32" bottom="28" left="32"/></padding>
+
+            <!-- Modal Header -->
+            <HBox alignment="CENTER_LEFT">
+                <VBox spacing="2" HBox.hgrow="ALWAYS">
+                    <Label text="Create Account ✨" styleClass="bistro-modal-title"/>
+                    <Label text="Join FoodHub and start ordering fresh meals" styleClass="bistro-modal-desc"/>
+                </VBox>
+                <Button text="✕" onAction="#handleCloseModal" styleClass="bistro-modal-close-btn"/>
+            </HBox>
+
+            <!-- Google Sign-Up Button -->
+            <Button fx:id="googleSignupButton" text="  Sign up with Google"
+                    styleClass="auth-google-btn" maxWidth="Infinity" onAction="#handleGoogleSignup">
+                <graphic>
+                    <ImageView fitWidth="18" fitHeight="18" preserveRatio="true">
+                        <image>
+                            <Image url="@../images/google_logo.png"/>
+                        </image>
+                    </ImageView>
+                </graphic>
+            </Button>
+
+            <!-- Divider -->
+            <HBox alignment="CENTER" spacing="10">
+                <Separator HBox.hgrow="ALWAYS" style="-fx-opacity: 0.45;"/>
+                <Label text="or register with email" styleClass="auth-divider-text"/>
+                <Separator HBox.hgrow="ALWAYS" style="-fx-opacity: 0.45;"/>
+            </HBox>
+
+            <!-- Full Name -->
+            <VBox spacing="3" maxWidth="Infinity">
+                <Label text="Full Name *" styleClass="field-label"/>
+                <TextField fx:id="regNameField" promptText="e.g. Ayush Satyam" styleClass="input-field-modern"/>
+            </VBox>
+
+            <!-- Email Address -->
+            <VBox spacing="3" maxWidth="Infinity">
+                <Label text="Email Address *" styleClass="field-label"/>
+                <TextField fx:id="regEmailField" promptText="e.g. ayush@example.com" styleClass="input-field-modern"/>
+            </VBox>
+
+            <!-- Password -->
+            <VBox spacing="3" maxWidth="Infinity">
+                <Label text="Password (min 6 characters) *" styleClass="field-label"/>
+                <PasswordField fx:id="regPasswordField" promptText="Create a secure password" styleClass="input-field-modern"/>
+            </VBox>
+
+            <!-- Confirm Password -->
+            <VBox spacing="3" maxWidth="Infinity">
+                <Label text="Confirm Password *" styleClass="field-label"/>
+                <PasswordField fx:id="regConfirmPasswordField" promptText="Re-enter your password" styleClass="input-field-modern"/>
+            </VBox>
+
+            <!-- Error Label -->
+            <Label fx:id="regErrorLabel" styleClass="error-label" text="" wrapText="true" visible="false"/>
+
+            <!-- Submit Button -->
+            <Button fx:id="registerSubmitButton" text="Create Account &amp; Start Ordering →"
+                    styleClass="bistro-modal-submit-btn" maxWidth="Infinity" onAction="#handleRegisterSubmit"/>
+
+            <!-- Switch to Sign In -->
+            <HBox alignment="CENTER" spacing="6">
+                <Label text="Already have an account?" styleClass="auth-hint"/>
+                <Hyperlink text="Sign In" onAction="#handleOpenSignInModal" styleClass="auth-link"/>
+            </HBox>
+        </VBox>
+
+        <!-- ==================== 3. ADMIN SIGN IN MODAL CARD ==================== -->
+        <VBox fx:id="adminCard" visible="false" managed="false" styleClass="bistro-modal-card" maxWidth="430" spacing="14">
+            <padding><Insets top="28" right="32" bottom="28" left="32"/></padding>
+
+            <!-- Modal Header -->
+            <HBox alignment="CENTER_LEFT">
+                <VBox spacing="2" HBox.hgrow="ALWAYS">
+                    <Label text="Admin Sign In" styleClass="bistro-modal-title"/>
+                    <Label text="Staff &amp; kitchen management portal" styleClass="bistro-modal-desc"/>
+                </VBox>
+                <Button text="✕" onAction="#handleCloseModal" styleClass="bistro-modal-close-btn"/>
+            </HBox>
+
+            <!-- Admin Email -->
+            <VBox spacing="4" maxWidth="Infinity">
+                <Label text="Admin Email *" styleClass="field-label"/>
+                <TextField fx:id="adminEmailField" text="admin@food.com" promptText="admin@food.com" styleClass="input-field-modern"/>
+            </VBox>
+
+            <!-- Admin Password -->
+            <VBox spacing="4" maxWidth="Infinity">
+                <Label text="Admin Password *" styleClass="field-label"/>
+                <PasswordField fx:id="adminPasswordField" text="Admin@123" promptText="Admin@123" styleClass="input-field-modern"/>
+            </VBox>
+
+            <!-- Error Label -->
+            <Label fx:id="adminErrorLabel" styleClass="error-label" text="" wrapText="true" visible="false"/>
+
+            <!-- Admin Submit Button -->
+            <Button fx:id="adminLoginButton" text="Sign In as Admin →"
+                    styleClass="bistro-admin-submit-btn" maxWidth="Infinity" onAction="#handleAdminLogin"/>
+
+            <HBox alignment="CENTER" spacing="6">
+                <Label text="Not an administrator?" styleClass="auth-hint"/>
+                <Hyperlink text="Customer Sign In" onAction="#handleOpenSignInModal" styleClass="auth-link"/>
+            </HBox>
+        </VBox>
+
+    </StackPane>
+</StackPane>

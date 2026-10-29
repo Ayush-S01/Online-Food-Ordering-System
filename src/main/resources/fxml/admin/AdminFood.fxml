@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.control.cell.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.foodordering.controller.admin.AdminFoodController"
+            styleClass="root-pane">
+
+    <top>
+        <HBox styleClass="admin-navbar" alignment="CENTER_LEFT" spacing="14">
+            <Label text="🍽 FoodHub" styleClass="admin-brand"/>
+            <Label text="Menu &amp; Food Catalog" style="-fx-text-fill: #94A3B8; -fx-font-size: 14px; -fx-font-weight: 600;"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button fx:id="backBtn" text="← Back to Dashboard" onAction="#handleBack" styleClass="admin-nav-storefront-btn"/>
+        </HBox>
+    </top>
+
+    <center>
+        <HBox spacing="20">
+            <padding><Insets top="20" right="24" bottom="20" left="24"/></padding>
+
+            <!-- Table -->
+            <VBox spacing="10" HBox.hgrow="ALWAYS">
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <Label text="All Food Items" styleClass="section-title"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Label text="💡 Click any row to view, edit, or toggle availability" style="-fx-text-fill: #64748B; -fx-font-size: 12px;"/>
+                </HBox>
+                <TableView fx:id="foodTable" VBox.vgrow="ALWAYS" prefHeight="540">
+                    <columns>
+                        <TableColumn fx:id="colId"        text="ID"          prefWidth="50"/>
+                        <TableColumn fx:id="colName"      text="Dish Name"   prefWidth="170"/>
+                        <TableColumn fx:id="colCuisine"   text="Cuisine"     prefWidth="120"/>
+                        <TableColumn fx:id="colCategory"  text="Category"    prefWidth="110"/>
+                        <TableColumn fx:id="colPrice"     text="Price (₹)"   prefWidth="90"/>
+                        <TableColumn fx:id="colAvailable" text="Available"   prefWidth="80"/>
+                    </columns>
+                </TableView>
+            </VBox>
+
+            <!-- Form panel -->
+            <VBox spacing="10" prefWidth="330" styleClass="form-panel">
+                <Label text="Dish Details &amp; Editor" styleClass="section-title"/>
+                <Label text="Dish Name *" styleClass="field-label"/>
+                <TextField fx:id="nameField" promptText="e.g. Chilli Paneer" styleClass="input-field"/>
+                
+                <HBox spacing="8">
+                    <VBox spacing="4" HBox.hgrow="ALWAYS">
+                        <Label text="Cuisine *" styleClass="field-label"/>
+                        <TextField fx:id="cuisineField" promptText="e.g. Chinese" styleClass="input-field"/>
+                    </VBox>
+                    <VBox spacing="4" HBox.hgrow="ALWAYS">
+                        <Label text="Category *" styleClass="field-label"/>
+                        <TextField fx:id="categoryField" promptText="e.g. Starters" styleClass="input-field"/>
+                    </VBox>
+                </HBox>
+
+                <Label text="Description" styleClass="field-label"/>
+                <TextArea fx:id="descField" promptText="Dish ingredients and preparation note" prefHeight="55" wrapText="true" styleClass="input-field"/>
+
+                <HBox spacing="8">
+                    <VBox spacing="4" HBox.hgrow="ALWAYS">
+                        <Label text="Price (₹) *" styleClass="field-label"/>
+                        <TextField fx:id="priceField" promptText="e.g. 260.00" styleClass="input-field"/>
+                    </VBox>
+                    <VBox spacing="4" HBox.hgrow="ALWAYS">
+                        <Label text="Image File" styleClass="field-label"/>
+                        <TextField fx:id="imagePathField" promptText="chilli_paneer.png" styleClass="input-field"/>
+                    </VBox>
+                </HBox>
+
+                <HBox spacing="18" style="-fx-padding: 4 0 4 0;">
+                    <CheckBox fx:id="availableCheck" text="In Stock / Available" selected="true" style="-fx-font-weight: 600;"/>
+                    <CheckBox fx:id="isVegCheck" text="Pure Veg 🟢" selected="true" style="-fx-font-weight: 600;"/>
+                </HBox>
+
+                <HBox spacing="10" style="-fx-padding: 6 0 0 0;">
+                    <Button fx:id="addBtn"    text="➕ Add New"   onAction="#handleAdd"    styleClass="primary-btn" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+                    <Button fx:id="updateBtn" text="💾 Update"    onAction="#handleUpdate" styleClass="primary-btn" style="-fx-background-color: #2563EB;" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+                </HBox>
+                <HBox spacing="10">
+                    <Button fx:id="toggleAvailBtn" text="🔄 Toggle Stock" onAction="#handleToggleAvail" styleClass="secondary-btn" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+                    <Button fx:id="deleteBtn"      text="🗑 Delete"       onAction="#handleDelete"      styleClass="danger-btn" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+                </HBox>
+                <Button fx:id="clearBtn" text="🧹 Clear Selection / New Form" onAction="#handleClear" styleClass="secondary-btn" maxWidth="Infinity"/>
+            </VBox>
+        </HBox>
+    </center>
+</BorderPane>

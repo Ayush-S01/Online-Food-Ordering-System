@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.control.cell.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.foodordering.controller.admin.AdminOrderController"
+            styleClass="root-pane">
+
+    <top>
+        <HBox styleClass="admin-navbar" alignment="CENTER_LEFT" spacing="14">
+            <Label text="🍽 FoodHub" styleClass="admin-brand"/>
+            <Label text="Live Order Management" style="-fx-text-fill: #94A3B8; -fx-font-size: 14px; -fx-font-weight: 600;"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button fx:id="backBtn" text="← Back to Dashboard" onAction="#handleBack" styleClass="admin-nav-storefront-btn"/>
+        </HBox>
+    </top>
+
+    <center>
+        <HBox spacing="20">
+            <padding><Insets top="20" right="24" bottom="20" left="24"/></padding>
+
+            <!-- Left: Orders Table -->
+            <VBox spacing="10" HBox.hgrow="ALWAYS">
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <Label text="Customer Orders" styleClass="section-title"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Button text="🔄 Refresh Orders" onAction="#handleRefresh" styleClass="secondary-btn" style="-fx-font-size: 12px; -fx-padding: 6 12;"/>
+                </HBox>
+                <TableView fx:id="ordersTable" VBox.vgrow="ALWAYS" prefHeight="540">
+                    <columns>
+                        <TableColumn fx:id="colOrderId"    text="Order ID"    prefWidth="75"/>
+                        <TableColumn fx:id="colCustomerId" text="Cust ID"     prefWidth="75"/>
+                        <TableColumn fx:id="colDate"       text="Placed Date &amp; Time" prefWidth="160"/>
+                        <TableColumn fx:id="colTotal"      text="Amount (₹)"  prefWidth="105"/>
+                        <TableColumn fx:id="colStatus"     text="Live Status" prefWidth="140"/>
+                    </columns>
+                </TableView>
+            </VBox>
+
+            <!-- Right: Order Details & Action Panel -->
+            <VBox spacing="12" prefWidth="350" styleClass="form-panel">
+                <Label text="Order Details &amp; Control" styleClass="section-title"/>
+
+                <!-- Selected Order Overview Card -->
+                <VBox spacing="6" style="-fx-background-color: #F8FAFC; -fx-padding: 12; -fx-background-radius: 10px; -fx-border-color: #E2E8F0; -fx-border-radius: 10px;">
+                    <HBox alignment="CENTER_LEFT">
+                        <Label fx:id="selectedOrderIdLabel" text="No order selected" style="-fx-font-weight: bold; -fx-font-size: 15px; -fx-text-fill: #1E293B;"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Label fx:id="selectedOrderStatusBadge" text="—" styleClass="order-status-confirmed"/>
+                    </HBox>
+                    <Label fx:id="customerInfoLabel" text="Select an order from the table to inspect details" wrapText="true" style="-fx-font-size: 12px; -fx-text-fill: #64748B;"/>
+                    <Label fx:id="deliveryAddressLabel" text="" wrapText="true" style="-fx-font-size: 12px; -fx-text-fill: #475569; -fx-font-weight: 600;"/>
+                    <Label fx:id="totalAmountLabel" text="" style="-fx-font-size: 16px; -fx-font-weight: 800; -fx-text-fill: #FF5E36;"/>
+                </VBox>
+
+                <!-- Items breakdown -->
+                <Label text="Dishes in this Order:" styleClass="field-label"/>
+                <TextArea fx:id="orderItemsArea" editable="false" prefHeight="130" wrapText="true"
+                          promptText="Select an order to view ordered items..."
+                          styleClass="input-field" style="-fx-font-family: 'Consolas', 'Courier New', monospace; -fx-font-size: 12px;"/>
+
+                <!-- Status Update Section -->
+                <Label text="Change Status to:" styleClass="field-label"/>
+                <ComboBox fx:id="statusCombo" maxWidth="Infinity" styleClass="input-field"/>
+                <Button fx:id="updateStatusBtn" text="💾 Update Status"
+                        onAction="#handleUpdateStatus" styleClass="primary-btn" maxWidth="Infinity"/>
+
+                <!-- Quick Action Buttons -->
+                <Label text="Quick Status Change:" style="-fx-font-size: 11px; -fx-font-weight: bold; -fx-text-fill: #888;"/>
+                <HBox spacing="8">
+                    <Button text="👨‍🍳 Preparing" onAction="#handleQuickPreparing" styleClass="secondary-btn" HBox.hgrow="ALWAYS" maxWidth="Infinity" style="-fx-font-size: 11.5px; -fx-padding: 6 8;"/>
+                    <Button text="🛵 Out for Delivery" onAction="#handleQuickOutForDelivery" styleClass="secondary-btn" HBox.hgrow="ALWAYS" maxWidth="Infinity" style="-fx-font-size: 11.5px; -fx-padding: 6 8;"/>
+                </HBox>
+                <HBox spacing="8">
+                    <Button text="✅ Delivered" onAction="#handleQuickDelivered" styleClass="primary-btn" style="-fx-background-color: #10B981; -fx-font-size: 11.5px; -fx-padding: 6 8;" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+                    <Button text="❌ Cancel" onAction="#handleQuickCancelled" styleClass="danger-btn" style="-fx-font-size: 11.5px; -fx-padding: 6 8;" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+                </HBox>
+                <Button fx:id="viewDetailsBtn" text="📄 Full Order Modal" onAction="#handleViewDetails" styleClass="secondary-btn" maxWidth="Infinity" style="-fx-font-size: 12px;"/>
+            </VBox>
+        </HBox>
+    </center>
+</BorderPane>
