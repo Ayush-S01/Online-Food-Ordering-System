@@ -19,6 +19,7 @@ import javafx.stage.Stage;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -44,6 +45,9 @@ public class CheckoutController {
     @FXML private TextField       couponField;
     @FXML private Button          applyCouponBtn;
     @FXML private Label           couponStatusLabel;
+    @FXML private VBox            availableOffersBox;
+    @FXML private Label           availableOffersLabel;
+    @FXML private FlowPane        couponChipsPane;
 
     // Payment Selection
     @FXML private ToggleGroup     paymentToggle;
@@ -117,8 +121,42 @@ public class CheckoutController {
         deliveryAddressField.setText("Flat 402, Greenview Residency, Park Avenue");
 
         updateSummaryLabels();
+        loadAvailableCoupons();
         couponStatusLabel.setVisible(false);
         if (payProgressIndicator != null) payProgressIndicator.setVisible(false);
+    }
+
+    private void loadAvailableCoupons() {
+        if (couponChipsPane == null) return;
+        couponChipsPane.getChildren().clear();
+
+        List<Discount> activeCoupons = discountService.getActiveCoupons();
+        if (activeCoupons == null || activeCoupons.isEmpty()) {
+            if (availableOffersBox != null) {
+                availableOffersBox.setVisible(false);
+                availableOffersBox.setManaged(false);
+            }
+            return;
+        }
+
+        if (availableOffersBox != null) {
+            availableOffersBox.setVisible(true);
+            availableOffersBox.setManaged(true);
+        }
+
+        for (Discount d : activeCoupons) {
+            Button chip = new Button(d.getDisplayLabel());
+            chip.getStyleClass().add("coupon-chip");
+
+            StringBuilder tip = new StringBuilder("Tap to apply '").append(d.getCouponCode()).append("'");
+            if (d.getMinimumOrderAmount() != null && d.getMinimumOrderAmount().compareTo(BigDecimal.ZERO) > 0) {
+                tip.append(" (Min order ₹").append(d.getMinimumOrderAmount().stripTrailingZeros().toPlainString()).append(")");
+            }
+            chip.setTooltip(new Tooltip(tip.toString()));
+
+            chip.setOnAction(e -> applyCouponCode(d.getCouponCode()));
+            couponChipsPane.getChildren().add(chip);
+        }
     }
 
     private void updatePaymentForms() {
@@ -139,11 +177,6 @@ public class CheckoutController {
     private void handleApplyCoupon(ActionEvent event) {
         applyCouponCode(couponField.getText().trim());
     }
-
-    @FXML private void handleQuickCouponWelcome(ActionEvent e) { applyCouponCode("WELCOME10"); }
-    @FXML private void handleQuickCouponSave50(ActionEvent e)   { applyCouponCode("SAVE50"); }
-    @FXML private void handleQuickCouponFeast20(ActionEvent e)  { applyCouponCode("FEAST20"); }
-    @FXML private void handleQuickCouponFlat100(ActionEvent e) { applyCouponCode("FLAT100"); }
 
     private void applyCouponCode(String code) {
         couponField.setText(code);

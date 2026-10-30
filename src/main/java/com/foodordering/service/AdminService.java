@@ -81,6 +81,9 @@ public class AdminService {
     public void setCouponEnabled(int discountId, boolean enabled)
             throws SQLException { assertAdmin(); discountService.setCouponEnabled(discountId, enabled); }
 
+    public void deleteCoupon(int discountId)
+            throws SQLException { assertAdmin(); discountService.deleteCoupon(discountId); }
+
     // ------------------------------------------------------------------ //
     //  Role enforcement
     // ------------------------------------------------------------------ //

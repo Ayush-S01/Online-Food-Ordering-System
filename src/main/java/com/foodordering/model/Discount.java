@@ -74,6 +74,19 @@ public class Discount {
     //  Domain validation helpers
     // ------------------------------------------------------------------ //
 
+    /**
+     * Returns a user-friendly display label for chips, buttons, and promo banners.
+     * E.g. "WELCOME10 (10% OFF)" or "SAVE50 (₹50 OFF)".
+     */
+    public String getDisplayLabel() {
+        String valStr = discountValue != null ? discountValue.stripTrailingZeros().toPlainString() : "0";
+        if (discountType == Type.PERCENTAGE) {
+            return couponCode + " (" + valStr + "% OFF)";
+        } else {
+            return couponCode + " (₹" + valStr + " OFF)";
+        }
+    }
+
     /** Returns {@code true} if the coupon has not yet expired. */
     public boolean isNotExpired() {
         return !expiryDate.isBefore(LocalDate.now());

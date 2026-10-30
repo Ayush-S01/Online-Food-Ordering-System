@@ -70,9 +70,11 @@
                     <Button fx:id="addBtn"    text="➕ Add Coupon" onAction="#handleAdd"    styleClass="primary-btn" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
                     <Button fx:id="updateBtn" text="💾 Update"     onAction="#handleUpdate" styleClass="primary-btn" style="-fx-background-color: #2563EB;" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
                 </HBox>
-                <Button fx:id="toggleBtn" text="🔄 Toggle Active / Inactive"
-                        onAction="#handleToggleEnabled" styleClass="secondary-btn" maxWidth="Infinity"/>
-                <Button text="🧹 Clear Selection / New Form" onAction="#handleClear" styleClass="secondary-btn" maxWidth="Infinity"/>
+                <HBox spacing="10">
+                    <Button fx:id="toggleBtn" text="🔄 Toggle Active" onAction="#handleToggleEnabled" styleClass="secondary-btn" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+                    <Button fx:id="deleteBtn" text="🗑 Delete"        onAction="#handleDelete"        styleClass="danger-btn" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+                </HBox>
+                <Button fx:id="clearBtn" text="🧹 Clear Selection / New Form" onAction="#handleClear" styleClass="secondary-btn" maxWidth="Infinity"/>
             </VBox>
         </HBox>
     </center>

@@ -50,6 +50,8 @@ public class HomeController {
     // Main left-shifted scrollable content
     @FXML private ScrollPane  mainScrollPane;
     @FXML private VBox        cuisineSectionsContainer;
+    @FXML private VBox        homeOffersBox;
+    @FXML private HBox        homeOffersContainer;
 
     // Right sidebar: Today's Special View
     @FXML private VBox        rightSidePanel;
@@ -90,6 +92,7 @@ public class HomeController {
         welcomeLabel.setText("Hello, " + name + " 👋");
 
         loadMenuData();
+        loadActiveOffers();
         updateBottomCartPopup();
 
         // Ensure initially showing Today's Special when cart is empty
@@ -121,6 +124,36 @@ public class HomeController {
 
     public static void resetCart() {
         sharedCartService = new CartService();
+    }
+
+    /**
+     * Dynamically populates active promotional offers in the hero banner.
+     */
+    private void loadActiveOffers() {
+        if (homeOffersContainer == null) return;
+        homeOffersContainer.getChildren().clear();
+        try {
+            com.foodordering.service.DiscountService discountService = new com.foodordering.service.DiscountService();
+            List<com.foodordering.model.Discount> activeCoupons = discountService.getActiveCoupons();
+            if (activeCoupons == null || activeCoupons.isEmpty()) {
+                if (homeOffersBox != null) {
+                    homeOffersBox.setVisible(false);
+                    homeOffersBox.setManaged(false);
+                }
+                return;
+            }
+            if (homeOffersBox != null) {
+                homeOffersBox.setVisible(true);
+                homeOffersBox.setManaged(true);
+            }
+            int count = 0;
+            for (com.foodordering.model.Discount d : activeCoupons) {
+                if (count++ >= 3) break;
+                Label pill = new Label(d.getDisplayLabel());
+                pill.setStyle("-fx-background-color: #FFF0EB; -fx-text-fill: #FF5E36; -fx-font-size: 11px; -fx-font-weight: bold; -fx-padding: 4 8 4 8; -fx-background-radius: 6; -fx-border-color: #FF5E36; -fx-border-radius: 6;");
+                homeOffersContainer.getChildren().add(pill);
+            }
+        } catch (Exception ignored) {}
     }
 
     /**

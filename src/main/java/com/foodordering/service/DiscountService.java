@@ -76,6 +76,18 @@ public class DiscountService {
         return discount.calculateDiscount(orderSubtotal);
     }
 
+    /**
+     * Retrieves all active, non-expired coupons available for customers to use.
+     */
+    public List<Discount> getActiveCoupons() {
+        try {
+            return discountDAO.findActive();
+        } catch (SQLException e) {
+            System.err.println("[DiscountService] Could not retrieve active coupons: " + e.getMessage());
+            return java.util.Collections.emptyList();
+        }
+    }
+
     // ------------------------------------------------------------------ //
     //  Admin CRUD
     // ------------------------------------------------------------------ //
@@ -94,5 +106,9 @@ public class DiscountService {
 
     public void setCouponEnabled(int discountId, boolean enabled) throws SQLException {
         discountDAO.setEnabled(discountId, enabled);
+    }
+
+    public void deleteCoupon(int discountId) throws SQLException {
+        discountDAO.delete(discountId);
     }
 }

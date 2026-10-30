@@ -40,6 +40,8 @@ public class AdminCouponController {
     @FXML private Button addBtn;
     @FXML private Button updateBtn;
     @FXML private Button toggleBtn;
+    @FXML private Button deleteBtn;
+    @FXML private Button clearBtn;
     @FXML private Button backBtn;
 
     private final AdminService adminService = new AdminService();
@@ -139,6 +141,27 @@ public class AdminCouponController {
                     break;
                 }
             }
+        } catch (Exception e) {
+            AlertUtil.showError("Error", e.getMessage());
+        }
+    }
+
+    @FXML
+    private void handleDelete(ActionEvent event) {
+        Discount sel = couponsTable.getSelectionModel().getSelectedItem();
+        if (sel == null) {
+            AlertUtil.showWarning("Selection Required", "Please select a coupon from the table to delete.");
+            return;
+        }
+        if (!AlertUtil.showConfirm("Confirm Delete",
+                "Delete promo coupon '" + sel.getCouponCode() + "'? This action cannot be undone.")) {
+            return;
+        }
+        try {
+            adminService.deleteCoupon(sel.getDiscountId());
+            AlertUtil.showInfo("Deleted", "Coupon '" + sel.getCouponCode() + "' has been deleted.");
+            loadCoupons();
+            clearForm();
         } catch (Exception e) {
             AlertUtil.showError("Error", e.getMessage());
         }

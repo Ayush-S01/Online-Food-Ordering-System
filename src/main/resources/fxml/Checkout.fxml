@@ -69,14 +69,11 @@
                         </HBox>
                         <Label fx:id="couponStatusLabel" text="" wrapText="true" styleClass="coupon-status"/>
 
-                        <!-- One-click coupon chips -->
-                        <Label text="Available Offers (Tap to apply):" style="-fx-font-size: 11px; -fx-text-fill: #888;"/>
-                        <FlowPane hgap="8" vgap="8">
-                            <Button text="WELCOME10 (10% OFF)" onAction="#handleQuickCouponWelcome" styleClass="coupon-chip"/>
-                            <Button text="SAVE50 (₹50 OFF)"   onAction="#handleQuickCouponSave50"   styleClass="coupon-chip"/>
-                            <Button text="FEAST20 (20% OFF)"  onAction="#handleQuickCouponFeast20"  styleClass="coupon-chip"/>
-                            <Button text="FLAT100 (₹100 OFF)" onAction="#handleQuickCouponFlat100" styleClass="coupon-chip"/>
-                        </FlowPane>
+                        <!-- Dynamic one-click coupon chips -->
+                        <VBox fx:id="availableOffersBox" spacing="6">
+                            <Label fx:id="availableOffersLabel" text="Available Offers (Tap to apply):" style="-fx-font-size: 11px; -fx-text-fill: #888; -fx-font-weight: bold;"/>
+                            <FlowPane fx:id="couponChipsPane" hgap="8" vgap="8"/>
+                        </VBox>
                     </VBox>
 
                     <!-- Payment Method Card -->

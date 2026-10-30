@@ -78,12 +78,9 @@
                                        styleClass="hero-subtitle"/>
                             </VBox>
                             <!-- Quick Promo Code Pills -->
-                            <VBox spacing="4" alignment="CENTER_RIGHT">
+                            <VBox fx:id="homeOffersBox" spacing="4" alignment="CENTER_RIGHT">
                                 <Label text="Active Offers (Apply at checkout):" style="-fx-font-size: 11px; -fx-text-fill: #888; -fx-font-weight: bold;"/>
-                                <HBox spacing="6">
-                                    <Label text="SAVE50 (₹50 OFF)" style="-fx-background-color: #FFF0EB; -fx-text-fill: #FF5E36; -fx-font-size: 11px; -fx-font-weight: bold; -fx-padding: 4 8 4 8; -fx-background-radius: 6; -fx-border-color: #FF5E36; -fx-border-radius: 6;"/>
-                                    <Label text="FEAST20 (20% OFF)" style="-fx-background-color: #FFF0EB; -fx-text-fill: #FF5E36; -fx-font-size: 11px; -fx-font-weight: bold; -fx-padding: 4 8 4 8; -fx-background-radius: 6; -fx-border-color: #FF5E36; -fx-border-radius: 6;"/>
-                                </HBox>
+                                <HBox fx:id="homeOffersContainer" spacing="6"/>
                             </VBox>
                         </HBox>
                     </VBox>

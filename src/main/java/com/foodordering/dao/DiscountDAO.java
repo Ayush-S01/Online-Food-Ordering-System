@@ -55,6 +55,24 @@ public class DiscountDAO {
     }
 
     /**
+     * Returns all currently active and non-expired discount coupons.
+     */
+    public List<Discount> findActive() throws SQLException {
+        String sql = "SELECT discount_id, coupon_code, discount_type, discount_value, "
+                   + "minimum_order_amount, expiry_date, enabled "
+                   + "FROM discounts WHERE enabled = 1 AND expiry_date >= CURRENT_DATE "
+                   + "ORDER BY coupon_code";
+        List<Discount> list = new ArrayList<>();
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) list.add(mapRow(rs));
+        }
+        return list;
+    }
+
+    /**
      * Inserts a new discount coupon.
      *
      * @return the persisted Discount with its generated ID.
@@ -96,6 +114,17 @@ public class DiscountDAO {
 
             ps.setBoolean(1, enabled);
             ps.setInt(2, discountId);
+            ps.executeUpdate();
+        }
+    }
+
+    /** Deletes a discount coupon by ID. */
+    public void delete(int discountId) throws SQLException {
+        String sql = "DELETE FROM discounts WHERE discount_id=?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, discountId);
             ps.executeUpdate();
         }
     }

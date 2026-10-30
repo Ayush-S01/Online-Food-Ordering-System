@@ -158,4 +158,16 @@ class DiscountServiceTest {
         assertEquals(0, finalAmt.compareTo(BigDecimal.ZERO),
             "Expected 0 but got " + finalAmt);
     }
+
+    @Test
+    @DisplayName("Display label format for percentage and fixed coupons")
+    void testDisplayLabelFormatting() {
+        Discount d1 = new Discount(8, "SAVE20", Discount.Type.PERCENTAGE,
+            new BigDecimal("20.00"), BigDecimal.ZERO, FUTURE_DATE, true);
+        assertEquals("SAVE20 (20% OFF)", d1.getDisplayLabel());
+
+        Discount d2 = new Discount(9, "FLAT50", Discount.Type.FIXED,
+            new BigDecimal("50.00"), BigDecimal.ZERO, FUTURE_DATE, true);
+        assertEquals("FLAT50 (₹50 OFF)", d2.getDisplayLabel());
+    }
 }
