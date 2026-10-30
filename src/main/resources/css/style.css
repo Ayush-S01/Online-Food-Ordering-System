@@ -1387,3 +1387,48 @@
     -fx-border-color: #FF844B;
     -fx-effect: dropshadow(gaussian, rgba(255,94,54,0.12), 6, 0, 0, 2);
 }
+
+/* ================================================================
+   Modern Order Confirmation & Invoice Modal Dialogs
+   ================================================================ */
+.order-dialog-root {
+    -fx-background-color: #F8FAFC;
+    -fx-font-family: 'DM Sans', 'Segoe UI', system-ui, sans-serif;
+}
+.order-dialog-card {
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 14px;
+    -fx-border-color: #E2E8F0;
+    -fx-border-width: 1px;
+    -fx-border-radius: 14px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.08), 14, 0, 0, 4);
+}
+.order-dialog-primary-btn {
+    -fx-background-color: linear-gradient(to right, #FF5E36, #FF844B);
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: 800;
+    -fx-background-radius: 10px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(255, 94, 54, 0.35), 8, 0, 0, 2);
+}
+.order-dialog-primary-btn:hover {
+    -fx-background-color: linear-gradient(to right, #F44B20, #FF6F30);
+    -fx-effect: dropshadow(gaussian, rgba(255, 94, 54, 0.45), 10, 0, 0, 3);
+}
+.order-dialog-secondary-btn {
+    -fx-background-color: #F1F5F9;
+    -fx-border-color: #CBD5E1;
+    -fx-border-width: 1px;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+    -fx-text-fill: #334155;
+    -fx-font-size: 13px;
+    -fx-font-weight: 600;
+    -fx-cursor: hand;
+}
+.order-dialog-secondary-btn:hover {
+    -fx-background-color: #E2E8F0;
+    -fx-text-fill: #1E293B;
+}
+

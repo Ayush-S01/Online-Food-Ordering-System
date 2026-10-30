@@ -8,6 +8,7 @@ import com.foodordering.service.DiscountService;
 import com.foodordering.service.OrderService;
 import com.foodordering.util.AlertUtil;
 import com.foodordering.util.NavigationUtil;
+import com.foodordering.util.OrderConfirmationDialog;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.concurrent.Task;
@@ -286,11 +287,19 @@ public class CheckoutController {
             if (payProgressIndicator != null) payProgressIndicator.setVisible(false);
 
             Order order = paymentTask.getValue();
-            showOrderSuccessDialog(order, method, transactionRef, address);
+            Stage stage = (placeOrderBtn != null && placeOrderBtn.getScene() != null)
+                ? (Stage) placeOrderBtn.getScene().getWindow() : null;
+
+            OrderConfirmationDialog.Action action = OrderConfirmationDialog.show(
+                stage, order, method, transactionRef, address
+            );
 
             try {
-                Stage stage = (Stage) placeOrderBtn.getScene().getWindow();
-                NavigationUtil.navigateTo(stage, "/fxml/OrderHistory.fxml");
+                if (action == OrderConfirmationDialog.Action.BACK_TO_MENU) {
+                    NavigationUtil.navigateTo(stage, "/fxml/Home.fxml");
+                } else {
+                    NavigationUtil.navigateTo(stage, "/fxml/OrderHistory.fxml");
+                }
             } catch (Exception ex) {
                 AlertUtil.showError("Navigation Error", ex.getMessage());
             }
@@ -304,25 +313,6 @@ public class CheckoutController {
         });
 
         new Thread(paymentTask).start();
-    }
-
-    private void showOrderSuccessDialog(Order order, Payment.Method method, String txnRef, String address) {
-        String msg = String.format(
-            "🎉 ORDER PLACED SUCCESSFULLY!\n\n"
-            + "Order ID: #%d\n"
-            + "Payment Method: %s\n"
-            + "Transaction Ref: %s\n"
-            + "Amount Paid: ₹ %s\n\n"
-            + "📍 Delivery Address:\n%s\n\n"
-            + "⏱️ Estimated Delivery: 25 - 30 minutes\n\n"
-            + "Your fresh food is now being prepared by the restaurant!",
-            order.getOrderId(),
-            method.name().replace('_', ' '),
-            txnRef,
-            order.getFinalAmount().toPlainString(),
-            address
-        );
-        AlertUtil.showInfo("Payment Approved & Order Confirmed", msg);
     }
 
     @FXML

@@ -5,6 +5,7 @@ import com.foodordering.model.OrderItem;
 import com.foodordering.service.OrderService;
 import com.foodordering.util.AlertUtil;
 import com.foodordering.util.NavigationUtil;
+import com.foodordering.util.OrderInvoiceDialog;
 import com.foodordering.util.SessionManager;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -14,6 +15,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 /**
@@ -66,8 +68,9 @@ public class OrderHistoryController {
         Label idLabel = new Label("Order #" + order.getOrderId());
         idLabel.getStyleClass().add("order-id");
 
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd MMM yyyy, hh:mm a");
         Label dateLabel = new Label("• " + (order.getOrderDate() != null
-            ? order.getOrderDate().toLocalDate().toString() : "N/A"));
+            ? order.getOrderDate().format(dtf) : "N/A"));
         dateLabel.setStyle("-fx-text-fill: #777; -fx-font-size: 13px;");
 
         Region spacer = new Region();
@@ -95,7 +98,8 @@ public class OrderHistoryController {
         HBox footer = new HBox(14);
         footer.setAlignment(Pos.CENTER_LEFT);
 
-        Label amtLabel = new Label("Total: ₹ " + order.getFinalAmount().toPlainString());
+        Label amtLabel = new Label(String.format("Total: ₹ %.2f",
+            order.getFinalAmount() != null ? order.getFinalAmount().doubleValue() : 0.0));
         amtLabel.getStyleClass().add("order-amount");
 
         Region spacerFooter = new Region();
@@ -124,41 +128,10 @@ public class OrderHistoryController {
 
     private void showOrderDetails(Order order) {
         try {
+            Stage stage = (ordersContainer != null && ordersContainer.getScene() != null)
+                ? (Stage) ordersContainer.getScene().getWindow() : null;
             List<OrderItem> items = orderService.getOrderItems(order.getOrderId());
-            StringBuilder sb = new StringBuilder();
-            sb.append("🧾 INVOICE / RECEIPT - ORDER #").append(order.getOrderId()).append("\n");
-            sb.append("--------------------------------------------------\n");
-            sb.append("Date: ").append(order.getOrderDate() != null ? order.getOrderDate() : "N/A").append("\n");
-            sb.append("Status: ").append(order.getOrderStatus().name().replace('_', ' ')).append("\n");
-            if (order.getDeliveryAddress() != null) {
-                sb.append("Address: ").append(order.getDeliveryAddress()).append("\n");
-            }
-            if (order.getPaymentMethod() != null) {
-                sb.append("Payment: ").append(order.getPaymentMethod().replace('_', ' ')).append("\n");
-            }
-            sb.append("--------------------------------------------------\n");
-            sb.append("Ordered Items:\n\n");
-            for (OrderItem oi : items) {
-                sb.append(String.format("  %-25s x %-2d   ₹ %-8s\n",
-                    oi.getFoodNameSnapshot(), oi.getQuantity(), oi.getLineTotal().toPlainString()));
-            }
-            sb.append("--------------------------------------------------\n");
-            sb.append(String.format("  Subtotal:                     ₹ %s\n", order.getSubtotal().toPlainString()));
-            sb.append(String.format("  Discount:                   - ₹ %s\n", order.getDiscountAmount().toPlainString()));
-            sb.append(String.format("  TOTAL PAID:                   ₹ %s\n", order.getFinalAmount().toPlainString()));
-            sb.append("--------------------------------------------------\n");
-            sb.append("Thank you for ordering with FoodHub!");
-
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Order Invoice");
-            alert.setHeaderText("Order #" + order.getOrderId() + " Details");
-            TextArea ta = new TextArea(sb.toString());
-            ta.setEditable(false);
-            ta.setWrapText(true);
-            ta.setStyle("-fx-font-family: 'Consolas', 'Courier New', monospace; -fx-font-size: 13px;");
-            ta.setPrefSize(420, 320);
-            alert.getDialogPane().setContent(ta);
-            alert.showAndWait();
+            OrderInvoiceDialog.show(stage, order, items);
         } catch (Exception e) {
             AlertUtil.showError("Error", e.getMessage());
         }

@@ -6,6 +6,7 @@ import com.foodordering.service.AdminService;
 import com.foodordering.service.OrderService;
 import com.foodordering.util.AlertUtil;
 import com.foodordering.util.NavigationUtil;
+import com.foodordering.util.OrderInvoiceDialog;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -226,15 +227,10 @@ public class AdminOrderController {
             return;
         }
         try {
+            Stage stage = (ordersTable != null && ordersTable.getScene() != null)
+                ? (Stage) ordersTable.getScene().getWindow() : null;
             List<OrderItem> items = orderService.getOrderItems(selected.getOrderId());
-            StringBuilder sb = new StringBuilder("Order #" + selected.getOrderId() + "\n\n");
-            for (OrderItem oi : items) {
-                sb.append("  ").append(oi.getFoodNameSnapshot())
-                  .append(" × ").append(oi.getQuantity())
-                  .append(" = ₹ ").append(oi.getLineTotal().toPlainString()).append("\n");
-            }
-            sb.append("\nFinal: ₹ ").append(selected.getFinalAmount().toPlainString());
-            AlertUtil.showInfo("Order Details", sb.toString());
+            OrderInvoiceDialog.show(stage, selected, items);
         } catch (Exception e) {
             AlertUtil.showError("Error", e.getMessage());
         }
