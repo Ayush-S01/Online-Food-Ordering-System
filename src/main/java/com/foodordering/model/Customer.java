@@ -3,71 +3,49 @@ package com.foodordering.model;
 import java.time.LocalDateTime;
 
 /**
- * Represents a registered customer.
+ * Represents a registered customer in the system.
  *
- * <p>The {@code role} field is used for role-based access control in the service layer.
- * Possible values: "CUSTOMER", "ADMIN".
- *
- * <p>OOP: Encapsulation — fields are private, accessed via getters/setters.
+ * <p>Demonstrates Core Java OOP Principles:
+ * <ul>
+ *   <li><b>Inheritance</b>: Extends {@link User} to inherit identity, authentication, and role fields.</li>
+ *   <li><b>Polymorphism</b>: Overrides {@link #getUserTypeDescription()} with customer-specific capabilities.</li>
+ *   <li><b>Encapsulation</b>: Exposes type-safe accessors and ensures backward compatibility for {@code customerId}.</li>
+ * </ul>
  */
-public class Customer {
-
-    private int customerId;
-    private String name;
-    private String email;
-    private String passwordHash;    // SHA-256 hex — never plain text
-    private String role;            // "CUSTOMER" or "ADMIN"
-    private LocalDateTime createdAt;
+public class Customer extends User {
 
     // ------------------------------------------------------------------ //
-    //  Constructors
+    //  Constructors (Demonstrating super() constructor chaining)
     // ------------------------------------------------------------------ //
 
-    public Customer() {}
+    public Customer() {
+        super();
+        this.role = "CUSTOMER";
+    }
 
     public Customer(int customerId, String name, String email,
                     String passwordHash, String role, LocalDateTime createdAt) {
-        this.customerId   = customerId;
-        this.name         = name;
-        this.email        = email;
-        this.passwordHash = passwordHash;
-        this.role         = role;
-        this.createdAt    = createdAt;
+        super(customerId, name, email, passwordHash, role, createdAt);
     }
 
     // ------------------------------------------------------------------ //
-    //  Getters & Setters
+    //  Encapsulation — Backward Compatible Accessors for Customer ID
     // ------------------------------------------------------------------ //
 
-    public int getCustomerId()                    { return customerId;             }
-    public void setCustomerId(int id)             { this.customerId = id;          }
-
-    public String getName()                       { return name;                   }
-    public void setName(String name)              { this.name = name;              }
-
-    public String getEmail()                      { return email;                  }
-    public void setEmail(String email)            { this.email = email;            }
-
-    public String getPasswordHash()               { return passwordHash;           }
-    public void setPasswordHash(String hash)      { this.passwordHash = hash;      }
-
-    public String getRole()                       { return role;                   }
-    public void setRole(String role)              { this.role = role;              }
-
-    public LocalDateTime getCreatedAt()           { return createdAt;              }
-    public void setCreatedAt(LocalDateTime t)     { this.createdAt = t;            }
+    public int getCustomerId()                    { return getId(); }
+    public void setCustomerId(int id)             { setId(id); }
 
     // ------------------------------------------------------------------ //
-    //  Helpers
+    //  Polymorphic Method Implementation (Method Overriding)
     // ------------------------------------------------------------------ //
 
-    /** Returns {@code true} if this customer has the ADMIN role. */
-    public boolean isAdmin() {
-        return "ADMIN".equalsIgnoreCase(role);
+    @Override
+    public String getUserTypeDescription() {
+        return "Customer: Can browse multi-cuisine dishes, manage real-time cart, apply discount coupons, and place orders.";
     }
 
     @Override
     public String toString() {
-        return "Customer{id=" + customerId + ", name='" + name + "', role=" + role + '}';
+        return "Customer{id=" + getId() + ", name='" + getName() + "', email='" + getEmail() + "', role='" + getRole() + "'}";
     }
 }

@@ -1,5 +1,9 @@
 package com.foodordering.model;
 
+import com.foodordering.service.DiscountStrategy;
+import com.foodordering.service.FixedAmountDiscountStrategy;
+import com.foodordering.service.PercentageDiscountStrategy;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
@@ -127,6 +131,18 @@ public class Discount {
         }
         // cap: discount cannot exceed the subtotal
         return amount.min(subtotal);
+    }
+
+    /**
+     * Returns a polymorphic {@link DiscountStrategy} instance for this discount.
+     * Demonstrates the Strategy Pattern (OOP Polymorphism).
+     */
+    public DiscountStrategy toStrategy() {
+        if (discountType == Type.PERCENTAGE) {
+            return new PercentageDiscountStrategy(discountValue);
+        } else {
+            return new FixedAmountDiscountStrategy(discountValue);
+        }
     }
 
     @Override
